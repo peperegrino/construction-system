@@ -1,9 +1,8 @@
 package felipe.org.global_materials.controller;
 
-
-
 import felipe.org.global_materials.dtos.request.FornecedorRequestDTO;
 import felipe.org.global_materials.dtos.response.FornecedorResponseDTO;
+import felipe.org.global_materials.dtos.response.ProdutoResponseDTO;
 import felipe.org.global_materials.service.FornecedorService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -12,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @RestController
 @RequestMapping("/api/fornecedores")
 public class FornecedorController {
@@ -38,10 +38,15 @@ public class FornecedorController {
         return ResponseEntity.ok(fornecedorService.buscarPorId(id));
     }
 
+    @GetMapping("/{id}/produtos")
+    public ResponseEntity<List<ProdutoResponseDTO>> buscarProdutosPorFornecedor(@PathVariable Long id) {
+        return ResponseEntity.ok(fornecedorService.buscarProdutosPorFornecedor(id));
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<FornecedorResponseDTO> atualizar(@PathVariable Long id,
-                                                             @Valid @RequestBody FornecedorRequestDTO dto) {
+                                                           @Valid @RequestBody FornecedorRequestDTO dto) {
         return ResponseEntity.ok(fornecedorService.atualizar(id, dto));
     }
 

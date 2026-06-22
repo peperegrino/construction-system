@@ -5,6 +5,7 @@ import felipe.org.global_materials.dtos.response.VendaResponseDTO;
 import felipe.org.global_materials.service.VendaService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,5 +38,12 @@ public class VendaController {
     @GetMapping("/cliente/{clienteId}")
     public ResponseEntity<List<VendaResponseDTO>> buscarPorCliente(@PathVariable Long clienteId) {
         return ResponseEntity.ok(vendaService.buscarPorCliente(clienteId));
+    }
+
+    @PutMapping("/{id}/cancelar")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> cancelar(@PathVariable Long id) {
+        vendaService.cancelar(id);
+        return ResponseEntity.noContent().build();
     }
 }

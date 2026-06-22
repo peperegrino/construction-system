@@ -1,6 +1,5 @@
 package felipe.org.global_materials.controller;
 
-
 import felipe.org.global_materials.dtos.request.ProdutoRequestDTO;
 import felipe.org.global_materials.dtos.response.ProdutoResponseDTO;
 import felipe.org.global_materials.service.ProdutoService;
@@ -11,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/produtos")
@@ -48,15 +46,23 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.buscarPorId(id));
     }
 
-   @GetMapping("/codigo/{codigo}")
+    @GetMapping("/codigo/{codigo}")
     public ResponseEntity<ProdutoResponseDTO> buscarPorCodigo(@PathVariable String codigo) {
         return ResponseEntity.ok(produtoService.buscarPorCodigo(codigo));
+    }
+
+    @PatchMapping("/{id}/ajustar-estoque")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ProdutoResponseDTO> ajustarEstoque(
+            @PathVariable Long id,
+            @RequestParam int novaQuantidade) {
+        return ResponseEntity.ok(produtoService.ajustarEstoque(id, novaQuantidade));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable Long id,
-                                                          @Valid @RequestBody ProdutoRequestDTO dto) {
+                                                        @Valid @RequestBody ProdutoRequestDTO dto) {
         return ResponseEntity.ok(produtoService.atualizar(id, dto));
     }
 

@@ -1,6 +1,5 @@
 package felipe.org.global_materials.controller;
 
-
 import felipe.org.global_materials.dtos.response.UsuarioResponseDTO;
 import felipe.org.global_materials.service.UsuarioService;
 import org.springframework.http.ResponseEntity;
