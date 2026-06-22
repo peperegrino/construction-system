@@ -2,7 +2,6 @@ package felipe.org.global_materials.controller;
 
 import felipe.org.global_materials.dtos.response.FluxoCaixaDiarioResponseDTO;
 import felipe.org.global_materials.dtos.response.ProdutoMaisVendidoResponseDTO;
-import felipe.org.global_materials.dtos.response.ResumoMensalResponseDTO;
 import felipe.org.global_materials.service.RelatorioService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -42,8 +41,5 @@ public class RelatorioController {
         return ResponseEntity.ok(relatorioService.fluxoCaixaDeHoje());
     }
 
-    @GetMapping("/dashboard/resumo-mensal")
-    public ResponseEntity<ResumoMensalResponseDTO> obterResumoMensal() {
-        return ResponseEntity.ok(relatorioService.obterResumoMensal());
-    }
+
 }

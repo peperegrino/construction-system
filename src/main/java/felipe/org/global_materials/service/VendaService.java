@@ -8,7 +8,6 @@ import felipe.org.global_materials.repository.ClienteRepository;
 import felipe.org.global_materials.repository.ProdutoRepository;
 import felipe.org.global_materials.repository.UsuarioRepository;
 import felipe.org.global_materials.repository.VendaRepository;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +37,8 @@ public class VendaService {
 
     @Transactional
     public VendaResponseDTO registrar(VendaRequestDTO dto) {
-        Usuario usuarioLogado = obterUsuarioLogado();
+
+        Usuario usuarioLogado = null;
 
         Cliente cliente = null;
         if (dto.getClienteId() != null) {
@@ -97,11 +97,6 @@ public class VendaService {
                 .collect(Collectors.toList());
     }
 
-    private Usuario obterUsuarioLogado() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuário logado não encontrado: " + email));
-    }
 
     private VendaResponseDTO converterParaDTO(Venda venda) {
         return VendaResponseDTO.builder()
@@ -110,5 +105,8 @@ public class VendaService {
                 .clienteNome(venda.getCliente() != null ? venda.getCliente().getNome() : "Consumidor Final")
                 .usuarioNome(venda.getUsuario() != null ? venda.getUsuario().getNome() : null)
                 .build();
+    }
+
+    public void cancelar(Long id) {
     }
 }

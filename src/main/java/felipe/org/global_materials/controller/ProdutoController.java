@@ -30,9 +30,13 @@ public class ProdutoController {
     @GetMapping
     public ResponseEntity<List<ProdutoResponseDTO>> buscarTodos(
             @RequestParam(required = false) String descricao) {
+
+        System.out.println("ENTROU NO CONTROLLER");
+
         if (descricao != null && !descricao.isBlank()) {
             return ResponseEntity.ok(produtoService.buscarPorDescricao(descricao));
         }
+
         return ResponseEntity.ok(produtoService.buscarTodos());
     }
 
@@ -51,13 +55,7 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.buscarPorCodigo(codigo));
     }
 
-    @PatchMapping("/{id}/ajustar-estoque")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProdutoResponseDTO> ajustarEstoque(
-            @PathVariable Long id,
-            @RequestParam int novaQuantidade) {
-        return ResponseEntity.ok(produtoService.ajustarEstoque(id, novaQuantidade));
-    }
+
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")

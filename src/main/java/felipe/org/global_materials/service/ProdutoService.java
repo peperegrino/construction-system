@@ -1,5 +1,6 @@
 package felipe.org.global_materials.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import felipe.org.global_materials.dtos.request.ProdutoRequestDTO;
 import felipe.org.global_materials.dtos.response.ProdutoResponseDTO;
 import felipe.org.global_materials.entities.Fornecedor;
@@ -23,6 +24,7 @@ public class ProdutoService {
         this.fornecedorRepository = fornecedorRepository;
     }
 
+
     public ProdutoResponseDTO cadastrar(ProdutoRequestDTO dto) {
         if (produtoRepository.existsByCodigo(dto.getCodigo())) {
             throw new RuntimeException("Já existe um produto cadastrado com o código: " + dto.getCodigo());
@@ -33,20 +35,34 @@ public class ProdutoService {
                 .codigo(dto.getCodigo())
                 .nome(dto.getNome())
                 .descricao(dto.getDescricao())
+                .precoCusto(dto.getPrecoCusto())
                 .precoVenda(dto.getPrecoVenda())
                 .quantidadeEstoque(dto.getQuantidadeEstoque() != null ? dto.getQuantidadeEstoque() : 0)
-                .estoqueMinimo(dto.getEstoqueMinimo() != null ? dto.getEstoqueMinimo() : 0)
+                .estoqueMinimo(dto.getEstoqueMinimo()        != null ? dto.getEstoqueMinimo()        : 0)
+                .imagemUrl(dto.getImagemUrl())
                 .fornecedor(fornecedor)
                 .build();
 
-        Produto salvo = produtoRepository.save(produto);
-        return converterParaDTO(salvo);
+        return converterParaDTO(produtoRepository.save(produto));
     }
 
+
+    @Transactional(readOnly = true)
     public List<ProdutoResponseDTO> buscarTodos() {
-        return produtoRepository.findAll().stream()
-                .map(this::converterParaDTO)
-                .collect(Collectors.toList());
+
+        List<Produto> produtos = produtoRepository.findAll();
+
+        System.out.println("=== PRODUTOS ENCONTRADOS ===");
+        System.out.println(produtos.size());
+
+        return produtos.stream()
+                .map(produto -> {
+                    System.out.println(
+                            "Convertendo produto ID: " + produto.getId()
+                    );
+                    return converterParaDTO(produto);
+                })
+                .toList();
     }
 
     public List<ProdutoResponseDTO> buscarPorDescricao(String descricao) {
@@ -62,15 +78,13 @@ public class ProdutoService {
     }
 
     public ProdutoResponseDTO buscarPorId(Long id) {
-        Produto produto = produtoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado com ID: " + id));
-        return converterParaDTO(produto);
+        return converterParaDTO(produtoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado com ID: " + id)));
     }
 
     public ProdutoResponseDTO buscarPorCodigo(String codigo) {
-        Produto produto = produtoRepository.findByCodigo(codigo)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado com o código: " + codigo));
-        return converterParaDTO(produto);
+        return converterParaDTO(produtoRepository.findByCodigo(codigo)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado com o código: " + codigo)));
     }
 
     public ProdutoResponseDTO atualizar(Long id, ProdutoRequestDTO dto) {
@@ -86,15 +100,18 @@ public class ProdutoService {
         produto.setCodigo(dto.getCodigo());
         produto.setNome(dto.getNome());
         produto.setDescricao(dto.getDescricao());
+        produto.setPrecoCusto(dto.getPrecoCusto());
         produto.setPrecoVenda(dto.getPrecoVenda());
+        produto.setQuantidadeEstoque(dto.getQuantidadeEstoque());
         produto.setEstoqueMinimo(dto.getEstoqueMinimo());
+        produto.setImagemUrl(dto.getImagemUrl());
         produto.setFornecedor(fornecedor);
 
-        Produto atualizado = produtoRepository.save(produto);
-        return converterParaDTO(atualizado);
+        return converterParaDTO(produtoRepository.save(produto));
     }
 
-    public void excluir(Long id) {
+
+  public void excluir(Long id) {
         Produto produto = produtoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado com ID: " + id));
         produto.setAtivo(false);
@@ -102,23 +119,30 @@ public class ProdutoService {
     }
 
     private Fornecedor buscarFornecedorSeInformado(Long fornecedorId) {
-        if (fornecedorId == null) {
-            return null;
-        }
+        if (fornecedorId == null) return null;
         return fornecedorRepository.findById(fornecedorId)
                 .orElseThrow(() -> new RuntimeException("Fornecedor não encontrado com ID: " + fornecedorId));
     }
 
     private ProdutoResponseDTO converterParaDTO(Produto produto) {
+        double margem = produto.getPrecoCusto() > 0
+                ? ((produto.getPrecoVenda() - produto.getPrecoCusto()) / produto.getPrecoCusto()) * 100
+                : 0;
+
         return ProdutoResponseDTO.builder()
                 .id(produto.getId())
                 .codigo(produto.getCodigo())
                 .nome(produto.getNome())
                 .descricao(produto.getDescricao())
+                .precoCusto(produto.getPrecoCusto())
                 .precoVenda(produto.getPrecoVenda())
+                .margemLucroPercentual(Math.round(margem * 100.0) / 100.0)
                 .quantidadeEstoque(produto.getQuantidadeEstoque())
                 .estoqueMinimo(produto.getEstoqueMinimo())
+                .estoqueBaixo(produto.isEstoqueBaixo())
+                .imagemUrl(produto.getImagemUrl())
                 .ativo(produto.getAtivo())
+                .fornecedorId(produto.getFornecedor() != null ? produto.getFornecedor().getId()   : null)
                 .fornecedorNome(produto.getFornecedor() != null ? produto.getFornecedor().getNome() : null)
                 .build();
     }

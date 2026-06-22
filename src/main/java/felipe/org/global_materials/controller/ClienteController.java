@@ -41,10 +41,6 @@ public class ClienteController {
         return ResponseEntity.ok(clienteService.buscarPorId(id));
     }
 
-    @GetMapping("/documento/{documento}")
-    public ResponseEntity<ClienteResponseDTO> buscarPorDocumento(@PathVariable String documento) {
-        return ResponseEntity.ok(clienteService.buscarPorDocumento(documento));
-    }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")

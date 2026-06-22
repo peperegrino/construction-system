@@ -41,6 +41,9 @@ public class ProdutoRequestDTO {
     @PositiveOrZero(message = "O estoque mínimo não pode ser negativo")
     private Integer estoqueMinimo;
 
+    @Size(max = 500, message = "A URL da imagem deve ter no máximo 500 caracteres")
+    private String imagemUrl;
+
     @NotNull(message = "O ID do fornecedor é obrigatório")
     private Long fornecedorId;
 }

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jspecify.annotations.Nullable;
 
 import java.time.LocalDateTime;
 
@@ -20,4 +21,8 @@ public class UsuarioResponseDTO {
     private RoleType role;
     private Boolean ativo;
     private LocalDateTime criadoEm;
+
+    public @Nullable CharSequence getSenha() {
+        return null;
+    }
 }

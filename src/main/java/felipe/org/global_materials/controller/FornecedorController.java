@@ -38,10 +38,6 @@ public class FornecedorController {
         return ResponseEntity.ok(fornecedorService.buscarPorId(id));
     }
 
-    @GetMapping("/{id}/produtos")
-    public ResponseEntity<List<ProdutoResponseDTO>> buscarProdutosPorFornecedor(@PathVariable Long id) {
-        return ResponseEntity.ok(fornecedorService.buscarProdutosPorFornecedor(id));
-    }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")

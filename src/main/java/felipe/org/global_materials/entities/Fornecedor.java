@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -26,8 +27,14 @@ public class Fornecedor {
     @Builder.Default
     private Boolean ativo = true;
 
-    @OneToMany(mappedBy = "fornecedor", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(
+            mappedBy = "fornecedor",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.PERSIST
+    )
     @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<Produto> produtos = new ArrayList<>();
 
     private LocalDateTime criadoEm;
@@ -35,6 +42,7 @@ public class Fornecedor {
     @PrePersist
     public void prePersist() {
         this.criadoEm = LocalDateTime.now();
+
         if (this.ativo == null) {
             this.ativo = true;
         }

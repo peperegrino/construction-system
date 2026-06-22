@@ -1,13 +1,11 @@
 package felipe.org.global_materials.controller;
 
 import felipe.org.global_materials.dtos.request.EntradaEstoqueRequestDTO;
-import felipe.org.global_materials.dtos.request.SaidaEstoqueRequestDTO;
 import felipe.org.global_materials.dtos.response.MovimentacaoEstoqueResponseDTO;
 import felipe.org.global_materials.service.MovimentacaoEstoqueService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,12 +26,7 @@ public class MovimentacaoEstoqueController {
         return ResponseEntity.status(HttpStatus.CREATED).body(movimentacaoEstoqueService.registrarEntrada(dto));
     }
 
-    @PostMapping("/saida")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<MovimentacaoEstoqueResponseDTO> registrarSaida(
-            @Valid @RequestBody SaidaEstoqueRequestDTO dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(movimentacaoEstoqueService.registrarSaida(dto));
-    }
+
 
     @GetMapping
     public ResponseEntity<List<MovimentacaoEstoqueResponseDTO>> buscarTodas() {

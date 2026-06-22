@@ -20,6 +20,7 @@ public class ProdutoResponseDTO {
     private Integer quantidadeEstoque;
     private Integer estoqueMinimo;
     private Boolean estoqueBaixo;
+    private String imagemUrl;
     private Long fornecedorId;
     private String fornecedorNome;
     private Boolean ativo;

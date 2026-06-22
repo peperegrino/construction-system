@@ -40,10 +40,5 @@ public class VendaController {
         return ResponseEntity.ok(vendaService.buscarPorCliente(clienteId));
     }
 
-    @PutMapping("/{id}/cancelar")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> cancelar(@PathVariable Long id) {
-        vendaService.cancelar(id);
-        return ResponseEntity.noContent().build();
-    }
+
 }
