@@ -10,5 +10,3 @@ public class Into {
         SwingUtilities.invokeLater(() -> new Inicial().setVisible(true));
     }
 }
-
-

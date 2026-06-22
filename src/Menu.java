@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,6 +9,16 @@ public class Menu extends JFrame {
         setSize(500, 400);
         setLocationRelativeTo(null);
 
+        JMenuBar menuBar = getBar();
+        setJMenuBar(menuBar);
+
+        JLabel lblBemVindo = new JLabel("Selecione uma opção no menu acima.", SwingConstants.CENTER);
+        lblBemVindo.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        add(lblBemVindo, BorderLayout.CENTER);
+    }
+
+    private JMenuBar getBar() {
         JMenuBar menuBar = new JMenuBar();
 
         JMenu menuArquivo = new JMenu("Arquivo");
@@ -22,20 +31,12 @@ public class Menu extends JFrame {
 
         JMenu menuEstoque = new JMenu("Estoque");
         JMenuItem itemListagem = new JMenuItem("Listagem de Produtos");
+
         itemListagem.addActionListener(e -> new InicialPage().setVisible(true));
         menuEstoque.add(itemListagem);
 
         menuBar.add(menuArquivo);
         menuBar.add(menuEstoque);
-        setJMenuBar(menuBar);
-
-        JLabel lblBemVindo = new JLabel("Selecione uma opção no menu acima.", SwingConstants.CENTER);
-        lblBemVindo.setFont(new Font("Arial", Font.PLAIN, 14));
-
-        add(lblBemVindo, BorderLayout.CENTER);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Menu().setVisible(true));
+        return menuBar;
     }
 }

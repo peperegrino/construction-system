@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -28,7 +27,7 @@ public class Login extends JFrame {
             campSenha.setText("");
         });
 
-        btnEntrar.addActionListener(e -> fazerLogin());
+        btnEntrar.addActionListener(e -> entrar());
 
         JPanel formPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         formPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -47,20 +46,8 @@ public class Login extends JFrame {
         add(btnPanel, BorderLayout.SOUTH);
     }
 
-    private void fazerLogin() {
-        String usuario = campUsuario.getText().trim();
-        String senha   = new String(campSenha.getPassword()).trim();
-
-        if (usuario.isEmpty() || senha.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Preencha usuário e senha.", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        new Menu().setVisible(true);
+    private void entrar() {
+         new Apresentacao().setVisible(true);
         dispose();
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Login().setVisible(true));
     }
 }
