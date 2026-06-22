@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/** Formato padronizado de resposta de erro, usado pelo GlobalExceptionHandler. */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-/** Linha do relatorio de giro de estoque / produtos mais vendidos. */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
